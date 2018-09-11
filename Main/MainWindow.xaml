@@ -5,8 +5,75 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Main"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="Calculator" 
+        Height="500" 
+        Width="320"
+        AllowsTransparency="True" 
+        WindowStyle="None"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown"
+        BorderBrush="#1883D7"
+        BorderThickness="1"
+        >
+
+    <Window.Resources>
+        <Style x:Key="BlackAndWhite">
+            <Setter Property="Control.FontFamily" Value="Verdana" />
+            <Setter Property="Control.Background" Value="Black" />
+            <Setter Property="Control.Foreground" Value="White" />
+            <Setter Property="Control.Margin" Value="10" />
+        </Style>
+    </Window.Resources>
+
+    <Window.Background>
+        <SolidColorBrush Opacity="0.7" Color="Black"/>
+    </Window.Background>
+    
+    <Grid x:Name="LayoutRoot">
         
+        <Grid.RowDefinitions>
+            <RowDefinition Height="240"/>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        
+        <TextBlock x:Name="textBlock" Grid.Column="0" Grid.ColumnSpan="4" />
+
+        <Button Grid.Column="0" Grid.Row="1" Style="{StaticResource BlackAndWhite}">%</Button>
+        <Button Grid.Column="1" Grid.Row="1" Style="{StaticResource BlackAndWhite}">√</Button>
+        <Button Grid.Column="2" Grid.Row="1" Style="{StaticResource BlackAndWhite}">Х²</Button>
+        <Button Grid.Column="3" Grid.Row="1" Style="{StaticResource BlackAndWhite}">CLEAR</Button>
+
+        <Button Grid.Column="0" Grid.Row="2" Style="{StaticResource BlackAndWhite}">7</Button>
+        <Button Grid.Column="1" Grid.Row="2" Style="{StaticResource BlackAndWhite}">8</Button>
+        <Button Grid.Column="2" Grid.Row="2" Style="{StaticResource BlackAndWhite}">9</Button>
+        <Button Grid.Column="3" Grid.Row="2" Style="{StaticResource BlackAndWhite}">+</Button>
+
+        <Button Grid.Column="0" Grid.Row="3" Style="{StaticResource BlackAndWhite}">4</Button>
+        <Button Grid.Column="1" Grid.Row="3" Style="{StaticResource BlackAndWhite}">5</Button>
+        <Button Grid.Column="2" Grid.Row="3" Style="{StaticResource BlackAndWhite}">6</Button>
+        <Button Grid.Column="3" Grid.Row="3" Style="{StaticResource BlackAndWhite}">-</Button>
+
+        <Button Grid.Column="0" Grid.Row="4" Style="{StaticResource BlackAndWhite}">1</Button>
+        <Button Grid.Column="1" Grid.Row="4" Style="{StaticResource BlackAndWhite}">2</Button>
+        <Button Grid.Column="2" Grid.Row="4" Style="{StaticResource BlackAndWhite}">3</Button>
+        <Button Grid.Column="3" Grid.Row="4" Style="{StaticResource BlackAndWhite}">.</Button>
+
+        <Button Grid.Column="0" Grid.Row="5" Style="{StaticResource BlackAndWhite}">×</Button>
+        <Button Grid.Column="1" Grid.Row="5" Style="{StaticResource BlackAndWhite}">0</Button>
+        <Button Grid.Column="2" Grid.Row="5" Style="{StaticResource BlackAndWhite}">÷</Button>
+        <Button Grid.Column="3" Grid.Row="5" Style="{StaticResource BlackAndWhite}">=</Button>
+      
     </Grid>
 </Window>
+    
+    
