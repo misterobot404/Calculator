@@ -24,8 +24,17 @@ namespace Main
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+
+            if (sender == ButtonMinimized)
+            {
+                WindowState = WindowState.Minimized;
+            } else
+            if (sender == ButtonExit)
+            {
+                this.Close();
+            }
             // Получаем текст кнопки
-            string s = (string)((Button)e.OriginalSource).Content;
+                string s = (string)((Button)e.OriginalSource).Content;
             // Добавляем его в текстовое поле
             textBlock.Text += s;
             int num;
