@@ -5,9 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Main"
         mc:Ignorable="d"
-        Title="Calculator" 
+        Title="Calculator"       
         Height="500" 
         Width="320"
+        Activated="App_Activated" 
+        Deactivated="App_Deactivated"
         AllowsTransparency="True" 
         WindowStyle="None"
         MouseLeftButtonDown="Window_MouseLeftButtonDown"
@@ -16,6 +18,21 @@
         >
 
     <Window.Resources>
+
+        <Storyboard x:Key="Open">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="newControl">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="297"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Storyboard x:Key="Close">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="newControl">
+                <EasingDoubleKeyFrame KeyTime="0" Value="297"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
         <Style x:Key="BlackAndWhite">
             <Setter Property="Control.FontSize" Value="26" />
             <Setter Property="Control.FontFamily" Value="Verdana" />
@@ -34,6 +51,18 @@
     <Window.Background>
         <SolidColorBrush Opacity="0.7" Color="Black"/>
     </Window.Background>
+
+    <Window.Triggers>
+
+        <EventTrigger RoutedEvent="Mouse.MouseEnter" SourceName="newControl">
+            <BeginStoryboard Storyboard="{StaticResource Open}"/>
+        </EventTrigger>
+
+        <EventTrigger RoutedEvent="Mouse.MouseLeave" SourceName="newControl">
+            <BeginStoryboard x:Name="Close_BeginStoryboard" Storyboard="{StaticResource Close}"/>
+        </EventTrigger>
+
+    </Window.Triggers>
 
     <Grid x:Name="LayoutRoot">
 
@@ -54,10 +83,22 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"  Margin="10,5,0,0" Text="Calculator" Foreground="White" FontSize="17"/>
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"  Margin="10,5,65,0" Text="Calculator" Foreground="White" FontSize="17"/>
+
+        <local:HistoryWindow x:Name="newControl" HorizontalAlignment="Left" Margin="-69,-150,-13,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Height="125" Grid.ColumnSpan="4">
+            <local:HistoryWindow.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="-89.922"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </local:HistoryWindow.RenderTransform>
+        </local:HistoryWindow>
 
         <Button x:Name="ButtonExit"  Grid.Row="0" Grid.Column="3" Style="{StaticResource BlackAndWhite}" FontSize="12" Margin="32,0,0,0" BorderThickness="0">╳</Button>
         <Button x:Name="ButtonMinimized"  Grid.Row="0" Grid.Column="2" Style="{StaticResource BlackAndWhite}" Margin="65,0,47,0" BorderThickness="0" Grid.ColumnSpan="2">-</Button>
+        <Button x:Name="ButtonHistoru"  Grid.Row="0" Grid.Column="2" Style="{StaticResource BlackAndWhite}" Margin="18,0,15,0" BorderThickness="0" FontSize="14" ToolTip="History" Content="H"/>
 
         <TextBlock x:Name="textBlock"  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="6" Foreground="White" FontSize="30" TextAlignment="Center" VerticalAlignment="Center"/>
 
@@ -88,5 +129,3 @@
 
     </Grid>
 </Window>
-    
-    
