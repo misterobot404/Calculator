@@ -107,5 +107,8 @@
   <ItemGroup>
     <Resource Include="Calculator.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\down.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

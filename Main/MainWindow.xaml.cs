@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Media.Animation;
+
 
 namespace Main
 {
@@ -20,6 +22,7 @@ namespace Main
         string leftop = ""; // Левый операнд
         string operation = ""; // Знак операции
         string rightop = ""; // Правый операнд
+        bool count = false; //было ли отрицание
         bool isApplicationActive;
 
         public MainWindow()
@@ -37,25 +40,41 @@ namespace Main
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            //if (sender == ButtonHistoru)
-            //{
-            //    MainWindow a = new MainWindow();
-            //    a.Show();
-            //}
             if (sender == ButtonMinimized)
             {
                 WindowState = WindowState.Minimized;
             }
+
             if (sender == ButtonExit)
             {
                 this.Close();
             }
+
             // Получаем текст кнопки
             string s = (string)((Button)e.OriginalSource).Content;
             // Добавляем его в текстовое поле
-            textBlock.Text += s;
-            int num;
+            if (s == "H" || s == "×²")
+            {
+                return;
+            }
+            else if (s == "±")
+            {
+                textBlock.Text += "-";
+                count = true;
+                return;
+            }
+            else
+            {
+                textBlock.Text += s;
+                if (count)
+                {
+                    s = textBlock.Text;
+                    count = false;
+                }
+            }
+
             // Пытаемся преобразовать его в число
+            int num;
             bool result = Int32.TryParse(s, out num);
             // Если текст - это число
             if (result == true)
@@ -119,7 +138,7 @@ namespace Main
                 case "-":
                     rightop = (num1 - num2).ToString();
                     break;
-                case "*":
+                case "╳":
                     rightop = (num1 * num2).ToString();
                     break;
                 case "/":

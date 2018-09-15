@@ -22,14 +22,14 @@
         <Storyboard x:Key="Open">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="newControl">
                 <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="297"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-275"/>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
 
         <Storyboard x:Key="Close">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="newControl">
-                <EasingDoubleKeyFrame KeyTime="0" Value="297"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="275"/>
+                <EasingDoubleKeyFrame KeyTime="1" Value="1"/>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
 
@@ -40,12 +40,14 @@
             <Setter Property="Control.Foreground" Value="White" />
             <Setter Property="Control.FontFamily" Value="Time New Roman" />
             <Setter Property="Control.BorderThickness" Value="0.8" />
+            <Setter Property="Control.Opacity" Value="0.9" />
             <Style.Triggers>
                 <Trigger Property="Control.IsMouseOver" Value="True">
                     <Setter Property="Control.Foreground" Value="Black"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
+
     </Window.Resources>
 
     <Window.Background>
@@ -53,12 +55,12 @@
     </Window.Background>
 
     <Window.Triggers>
-
-        <EventTrigger RoutedEvent="Mouse.MouseEnter" SourceName="newControl">
+           
+        <EventTrigger RoutedEvent="Button.Click" SourceName="ButtonHistoru">
             <BeginStoryboard Storyboard="{StaticResource Open}"/>
         </EventTrigger>
 
-        <EventTrigger RoutedEvent="Mouse.MouseLeave" SourceName="newControl">
+        <EventTrigger RoutedEvent="Button.Click" SourceName="Back">
             <BeginStoryboard x:Name="Close_BeginStoryboard" Storyboard="{StaticResource Close}"/>
         </EventTrigger>
 
@@ -84,17 +86,6 @@
         </Grid.ColumnDefinitions>
 
         <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"  Margin="10,5,65,0" Text="Calculator" Foreground="White" FontSize="17"/>
-
-        <local:HistoryWindow x:Name="newControl" HorizontalAlignment="Left" Margin="-69,-150,-13,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Height="125" Grid.ColumnSpan="4">
-            <local:HistoryWindow.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="-89.922"/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </local:HistoryWindow.RenderTransform>
-        </local:HistoryWindow>
 
         <Button x:Name="ButtonExit"  Grid.Row="0" Grid.Column="3" Style="{StaticResource BlackAndWhite}" FontSize="12" Margin="32,0,0,0" BorderThickness="0">╳</Button>
         <Button x:Name="ButtonMinimized"  Grid.Row="0" Grid.Column="2" Style="{StaticResource BlackAndWhite}" Margin="65,0,47,0" BorderThickness="0" Grid.ColumnSpan="2">-</Button>
@@ -127,5 +118,15 @@
         <Button Grid.Column="2" Grid.Row="6" Style="{StaticResource BlackAndWhite}" FontSize = "18">÷</Button>
         <Button Grid.Column="3" Grid.Row="6" Style="{StaticResource BlackAndWhite}" FontSize = "20">=</Button>
 
+        <local:HistoryWindow x:Name="newControl" RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="4" Grid.Row="6" Margin="0,57,0,-278">
+            <local:HistoryWindow.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </local:HistoryWindow.RenderTransform>
+        </local:HistoryWindow>
     </Grid>
 </Window>
