@@ -1,34 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Media.Animation;
-
+using System.Collections.ObjectModel;
 
 namespace Main
 {
     public partial class MainWindow : Window
     {
-        string leftop = ""; // Левый операнд
-        string operation = ""; // Знак операции
-        string rightop = ""; // Правый операнд
-        bool count = false; //было ли отрицание
+        string leftop = "";
+        string operation = "";
+        string rightop = "";
+        bool minus = false;
+        bool root = false;
+        bool first=true;
+        int count = 0;
         bool isApplicationActive;
 
+        ObservableCollection<string> MainList;
+              
         public MainWindow()
         {
             InitializeComponent();
-            // Добавляем обработчик для всех кнопок на гриде
+            MainList = new ObservableCollection<string>();
+            MainList.Add(" ");
+            MainList.Add(" ");
+            DataContext = MainList;
+
             foreach (UIElement c in LayoutRoot.Children)
             {
                 if (c is Button)
@@ -40,110 +38,182 @@ namespace Main
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (sender == ButtonMinimized)
+            try
             {
-                WindowState = WindowState.Minimized;
-            }
+                if (sender == ButtonMinimized)
+                {
+                    WindowState = WindowState.Minimized;
+                }
+                if (sender == ButtonExit)
+                {
+                    this.Close();
+                }
 
-            if (sender == ButtonExit)
-            {
-                this.Close();
-            }
+                string s = (string)((Button)e.OriginalSource).Content;
 
-            // Получаем текст кнопки
-            string s = (string)((Button)e.OriginalSource).Content;
-            // Добавляем его в текстовое поле
-            if (s == "H" || s == "×²")
-            {
-                return;
-            }
-            else if (s == "±")
-            {
-                textBlock.Text += "-";
-                count = true;
-                return;
-            }
-            else
-            {
-                textBlock.Text += s;
-                if (count)
+                if (s == "H")
                 {
-                    s = textBlock.Text;
-                    count = false;
+                    return;
                 }
-            }
-
-            // Пытаемся преобразовать его в число
-            int num;
-            bool result = Int32.TryParse(s, out num);
-            // Если текст - это число
-            if (result == true)
-            {
-                // Если операция не задана
-                if (operation == "")
+                else if (s == "×²")
                 {
-                    // Добавляем к левому операнду
-                    leftop += s;
-                }
-                else
-                {
-                    // Иначе к правому операнду
-                    rightop += s;
-                }
-            }
-            // Если было введено не число
-            else
-            {
-                // Если равно, то выводим результат операции
-                if (s == "=")
-                {
-                    Update_RightOp();
-                    textBlock.Text += rightop;
-                    operation = "";
-                }
-                // Очищаем поле и переменные
-                else if (s == "CLEAR")
-                {
-                    leftop = "";
-                    rightop = "";
-                    operation = "";
+                    double num1 = Double.Parse(leftop);
                     textBlock.Text = "";
+                    textBlock.Text += (num1 * num1).ToString();
+                    return;
                 }
-                // Получаем операцию
+                else if (s == "√")
+                {
+                    textBlock.Text += "√";
+                    root = true;
+                    return;
+                }
+                else if (s == "±")
+                {
+                    textBlock.Text += "-";
+                    minus = true;
+                    return;
+                }
                 else
                 {
-                    // Если правый операнд уже имеется, то присваиваем его значение левому
-                    // операнду, а правый операнд очищаем
-                    if (rightop != "")
+                    textBlock.Text += s;
+                    if (minus)
                     {
+                        s = textBlock.Text;
+                        minus = false;
+                    }
+                }
+
+                double num;
+                bool result = Double.TryParse(s, out num);
+
+                if (result == true || s == ".")
+                {
+                    if (operation == "")
+                    {
+                        leftop += s;
+                    }
+                    else
+                    {
+                        rightop += s;
+                    }
+                }
+                else
+                {
+                    if (root)
+                    {
+                        double l;
+                        if (operation == "")
+                        {
+                            l = Double.Parse(leftop);
+                            l = Math.Sqrt(l);
+                            s = l.ToString();
+                            leftop = s;
+                            s = "";
+                        }
+                        if (operation != "")
+                        {
+                            l = Double.Parse(rightop);
+                            l = Math.Sqrt(l);
+                            s = l.ToString();
+                            rightop = s;
+                            s = "";
+                        }
                         Update_RightOp();
+                        textBlock.Text = rightop;
+                        operation = "";
+                        root = false;
+                    }
+                    if (s == "=")
+                    {
+                        if(first)
+                        {
+                            MainList.RemoveAt(1);
+                            MainList.RemoveAt(0);
+                            first = false;
+                        }
+                        if (count > 2)
+                        {
+                            MainList.RemoveAt(1);
+                            MainList.Add(textBlock.Text);
+                            Update_RightOp();
+                            MainList.RemoveAt(0);
+                            MainList.Add(rightop);
+                        }
+                        else
+                        {
+                            MainList.Add(textBlock.Text);
+                            Update_RightOp();
+                            MainList.Add(rightop);
+                        }
+                        ++count;
+
+                        textBlock.Text = rightop;                       
                         leftop = rightop;
                         rightop = "";
+                        operation = "";
                     }
-                    operation = s;
+                    else if (s == "CLEAR")
+                    {
+                        leftop = "";
+                        rightop = "";
+                        operation = "";
+                        textBlock.Text = "";
+                    }
+                    else
+                    {
+                        if (rightop != "")
+                        {
+                            Update_RightOp();
+                            leftop = rightop;
+                            rightop = "";
+                        }
+                        operation = s;
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                textBlock.Text = "";
+                leftop = "";
+                rightop = "";
+                operation = "";
             }
         }
 
-        // Обновляем значение правого операнда
         private void Update_RightOp()
         {
-            int num1 = Int32.Parse(leftop);
-            int num2 = Int32.Parse(rightop);
-            switch (operation)
+            try
             {
-                case "+":
-                    rightop = (num1 + num2).ToString();
-                    break;
-                case "-":
-                    rightop = (num1 - num2).ToString();
-                    break;
-                case "╳":
-                    rightop = (num1 * num2).ToString();
-                    break;
-                case "/":
-                    rightop = (num1 / num2).ToString();
-                    break;
+                double num1 = Double.Parse(leftop);
+                double num2 = 0;
+                if (rightop != "") num2 = Double.Parse(rightop);
+
+                switch (operation)
+                {
+                    case "+":
+                        rightop = (num1 + num2).ToString();
+                        break;
+                    case "-":
+                        rightop = (num1 - num2).ToString();
+                        break;
+                    case "×":
+                        rightop = (num1 * num2).ToString();
+                        break;
+                    case "÷":
+                        rightop = (num1 / num2).ToString();
+                        break;
+                    default:
+                        rightop = leftop;
+                        break;
+                }
+            }
+            catch (Exception)
+            {
+                textBlock.Text = "";
+                leftop = "";
+                rightop = "";
+                operation = "";
             }
         }
 
@@ -162,8 +232,8 @@ namespace Main
         {
             this.isApplicationActive = false;
             this.BorderBrush = Brushes.Gray;
-            //new SolidColorBrush(Colors.Red)
         }
+
     }
 }
 
