@@ -1,27 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using System.Collections.ObjectModel;
 
 namespace Main
 {
     public partial class HistoryWindow : UserControl
     {
+        static public ObservableCollection<string> result = new ObservableCollection<string>();
+
         public HistoryWindow()
         {
-            InitializeComponent();                   
-        }                         
+            InitializeComponent();
+            myLabels.ItemsSource = result;
+        }
+        private void Back_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender == Back)
+            {
+                MainWindow.History = true;
+            }
+        }
+        static public void AddingNewItem(string str)
+        {
+            result.Insert(0, str);
+        }
     }
 }

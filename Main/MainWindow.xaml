@@ -22,13 +22,13 @@
         <Storyboard x:Key="Open">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="newControl">
                 <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-275"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-274"/>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
 
         <Storyboard x:Key="Close">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="newControl">
-                <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="275"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="274"/>
                 <EasingDoubleKeyFrame KeyTime="1" Value="1"/>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
@@ -56,9 +56,9 @@
 
     <Window.Triggers>
            
-        <EventTrigger RoutedEvent="Button.Click" SourceName="ButtonHistoru">
+        <!--<EventTrigger RoutedEvent="Button.Click" SourceName="ButtonHistoru">
             <BeginStoryboard Storyboard="{StaticResource Open}"/>
-        </EventTrigger>
+        </EventTrigger>-->
 
         <EventTrigger RoutedEvent="Button.Click" SourceName="Back">
             <BeginStoryboard x:Name="Close_BeginStoryboard" Storyboard="{StaticResource Close}"/>

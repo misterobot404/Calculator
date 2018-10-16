@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Collections.ObjectModel;
+using System.Windows.Media.Animation;
 
 namespace Main
 {
@@ -13,20 +13,12 @@ namespace Main
         string rightop = "";
         bool minus = false;
         bool root = false;
-        bool first=true;
-        int count = 0;
+        public static bool History = true;
         bool isApplicationActive;
 
-        ObservableCollection<string> MainList;
-              
         public MainWindow()
         {
             InitializeComponent();
-            MainList = new ObservableCollection<string>();
-            MainList.Add(" ");
-            MainList.Add(" ");
-            DataContext = MainList;
-
             foreach (UIElement c in LayoutRoot.Children)
             {
                 if (c is Button)
@@ -47,17 +39,33 @@ namespace Main
                 if (sender == ButtonExit)
                 {
                     this.Close();
-                }
+                }             
 
                 string s = (string)((Button)e.OriginalSource).Content;
 
                 if (s == "H")
-                {
-                    return;
+                {                   
+                    if (History)
+                    {
+                        Storyboard sb = Resources["Open"] as Storyboard;
+                        sb.Begin();
+                        History = false;
+                        return;
+                    }
+                    else
+                    {
+                        Storyboard sb = Resources["Close"] as Storyboard;
+                        sb.Begin();
+                        History = true;
+                        return;
+                    }
+                    
                 }
+
                 else if (s == "×²")
                 {
                     double num1 = Double.Parse(leftop);
+                    HistoryWindow.AddingNewItem(leftop + "*" + leftop + "=" + (num1 * num1).ToString());
                     textBlock.Text = "";
                     textBlock.Text += (num1 * num1).ToString();
                     return;
@@ -73,6 +81,10 @@ namespace Main
                     textBlock.Text += "-";
                     minus = true;
                     return;
+                }
+                else if (s == "CLEAR")
+                {
+                    throw new IndexOutOfRangeException();
                 }
                 else
                 {
@@ -120,45 +132,20 @@ namespace Main
                             s = "";
                         }
                         Update_RightOp();
+                        HistoryWindow.AddingNewItem(textBlock.Text + rightop);
                         textBlock.Text = rightop;
                         operation = "";
                         root = false;
                     }
                     if (s == "=")
-                    {
-                        if(first)
-                        {
-                            MainList.RemoveAt(1);
-                            MainList.RemoveAt(0);
-                            first = false;
-                        }
-                        if (count > 2)
-                        {
-                            MainList.RemoveAt(1);
-                            MainList.Add(textBlock.Text);
-                            Update_RightOp();
-                            MainList.RemoveAt(0);
-                            MainList.Add(rightop);
-                        }
-                        else
-                        {
-                            MainList.Add(textBlock.Text);
-                            Update_RightOp();
-                            MainList.Add(rightop);
-                        }
-                        ++count;
-
+                    {                        
+                        Update_RightOp();
+                        if (operation != "")
+                            HistoryWindow.AddingNewItem(textBlock.Text + rightop);                    
                         textBlock.Text = rightop;                       
                         leftop = rightop;
                         rightop = "";
                         operation = "";
-                    }
-                    else if (s == "CLEAR")
-                    {
-                        leftop = "";
-                        rightop = "";
-                        operation = "";
-                        textBlock.Text = "";
                     }
                     else
                     {
@@ -187,7 +174,8 @@ namespace Main
             {
                 double num1 = Double.Parse(leftop);
                 double num2 = 0;
-                if (rightop != "") num2 = Double.Parse(rightop);
+                if (rightop != "")
+                    num2 = Double.Parse(rightop);
 
                 switch (operation)
                 {
